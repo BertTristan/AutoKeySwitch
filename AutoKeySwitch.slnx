@@ -1,1 +1,8 @@
-<Solution />
+<Solution>
+  <Folder Name="/Éléments de solution/">
+    <File Path=".gitignore" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="AutoKeySwitch.Core/AutoKeySwitch.Core.csproj" />
+  <Project Path="AutoKeySwitch.Service/AutoKeySwitch.Service.csproj" />
+</Solution>
