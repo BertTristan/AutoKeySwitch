@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AutoKeySwitch.Core.Services
 {
-    public class AppMonitor
+    public static class AppMonitor
     {
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
