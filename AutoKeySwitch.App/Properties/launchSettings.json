@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "AutoKeySwitch.App (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "AutoKeySwitch.App (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

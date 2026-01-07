@@ -3,6 +3,10 @@
     <File Path=".gitignore" />
     <File Path="README.md" />
   </Folder>
+  <Project Path="AutoKeySwitch.App/AutoKeySwitch.App.csproj" Id="fdb33d7e-4924-45b8-9c19-4b69f9d8e20f">
+    <Platform Project="x64" />
+    <Deploy />
+  </Project>
   <Project Path="AutoKeySwitch.Core/AutoKeySwitch.Core.csproj" />
   <Project Path="AutoKeySwitch.Service/AutoKeySwitch.Service.csproj" />
 </Solution>
