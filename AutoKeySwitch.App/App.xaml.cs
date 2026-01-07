@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using AutoKeySwitch.Core.Models.Messages;
+using AutoKeySwitch.App.Services;
 using System;
 
 namespace AutoKeySwitch.App
@@ -114,6 +115,8 @@ namespace AutoKeySwitch.App
                         if (!string.IsNullOrEmpty(switchMsg?.Layout))
                         {
                             Debug.WriteLine($"Received layout: {switchMsg.Layout}");
+
+                            LayoutSwitcher.ChangeLayout(switchMsg.Layout);
                         }
                         break;
 
