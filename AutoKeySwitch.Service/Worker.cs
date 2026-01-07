@@ -4,6 +4,9 @@ namespace AutoKeySwitch.Service
 {
     public class Worker(ILogger<Worker> logger, IConfiguration configuration) : BackgroundService
     {
+        private string _lastAppName = "";
+        private string _lastAppPath = "";
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             int checkInterval = configuration.GetValue<int>("AutoKeySwitch:CheckIntervalMs");
@@ -13,7 +16,20 @@ namespace AutoKeySwitch.Service
             {
                 // Detect foreground app
                 (string appName, string appPath) = AppMonitor.DetectForegroundApp();
-                logger.LogInformation("{AppName} : {AppPath}", appName, appPath);
+
+                // Only switch layout if app has changed
+                if (!string.IsNullOrEmpty(appName) &&
+                    (appName != _lastAppName ||
+                    (appPath != _lastAppPath && !string.IsNullOrEmpty(appPath))))
+                {
+                    string layout = RulesManager.GetLayoutForApp(appName, appPath);
+
+                    logger.LogInformation("App: {AppName} > Layout: {Layout}", appName, layout);
+
+                    _lastAppName = appName;
+                    _lastAppPath = appPath;
+
+                }
 
                 await Task.Delay(checkInterval, stoppingToken);
             }
