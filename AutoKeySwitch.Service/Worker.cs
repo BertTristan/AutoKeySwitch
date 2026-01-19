@@ -2,15 +2,36 @@ using System.IO.Pipes;
 using System.Text.Json;
 using AutoKeySwitch.Core.Models.Messages;
 using AutoKeySwitch.Core.Services;
+using Serilog;
 
 namespace AutoKeySwitch.Service
 {
-    public class Worker(ILogger<Worker> logger, IConfiguration configuration) : BackgroundService
+    public class Worker(ILogger<Worker> logger, IConfiguration configuration, IHostApplicationLifetime hostLifetime) : BackgroundService
     {
         private string _lastAppName = "";
         private string _lastAppPath = "";
         private NamedPipeServerStream? _pipeServer;
         private StreamWriter? _writer;
+
+        public override Task StartAsync(CancellationToken cancellationToken)
+        {
+            hostLifetime.ApplicationStopping.Register(OnStopping);
+            hostLifetime.ApplicationStopped.Register(OnStopped);
+
+            return base.StartAsync(cancellationToken);
+        }
+
+        private void OnStopping()
+        {
+            Log.Information("=== Service Stopping (Lifetime) ===");
+            logger.LogInformation("Cleaning up resources...");
+        }
+
+        private void OnStopped()
+        {
+            Log.Information("=== Service Stopped ===");
+            Log.CloseAndFlush();
+        }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {

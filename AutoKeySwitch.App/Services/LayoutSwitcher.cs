@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Serilog;
 
 namespace AutoKeySwitch.App.Services
 {
@@ -31,16 +32,18 @@ namespace AutoKeySwitch.App.Services
 
                 if (hkl == IntPtr.Zero)
                 {
-                    Debug.WriteLine($"Failed to load layout: {layoutId}");
+                    Log.Warning("Failed to load layout: {LayoutId}", layoutId);
                     return;
                 }
 
                 // Broadcast layout change to all windows
                 SendMessage((IntPtr)HWND_BROADCAST, WM_INPUTLANGCHANGEREQUEST, IntPtr.Zero, hkl);
+
+                Log.Information("Layout changed: {LayoutId}", layoutId);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error: {ex.Message}");
+                Log.Error(ex, "Layout change error");
             }
         }
 

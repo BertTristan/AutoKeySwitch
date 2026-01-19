@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml;
 using AutoKeySwitch.Core.Models.Messages;
 using AutoKeySwitch.App.Services;
 using System;
+using Serilog;
 
 namespace AutoKeySwitch.App
 {
@@ -19,11 +20,30 @@ namespace AutoKeySwitch.App
 
         public App()
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.File(
+                    path: Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                        "AutoKeySwitch/Logs",
+                        "app-.log"
+                    ),
+                    rollingInterval: RollingInterval.Day,
+                    retainedFileCountLimit: 7,
+                    flushToDiskInterval: TimeSpan.FromSeconds(10),
+                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
+                )
+                .CreateLogger();
+
+            Log.Information("=== AutoKeySwitch App Starting ===");
+
             InitializeComponent();
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
+            Log.Information("App launched");
+
             _cancellationTokenSource = new CancellationTokenSource();
             StartPipeListener(_cancellationTokenSource.Token);
         }
@@ -46,12 +66,15 @@ namespace AutoKeySwitch.App
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error: {ex.Message}");
+                Log.Error(ex, "Pipe listener error");
             }
             finally
             {
                 _pipeClient?.Dispose();
                 _cancellationTokenSource?.Dispose();
+
+                Log.Information("=== App Stopping ===");
+                Log.CloseAndFlush();
             }
         }
 
@@ -63,14 +86,18 @@ namespace AutoKeySwitch.App
         {
             try
             {
+                Log.Information("Connecting to Service pipe...");
+
                 _pipeClient = new NamedPipeClientStream(".", "AutoKeySwitchPipe", PipeDirection.In);
                 await _pipeClient.ConnectAsync(cancellationToken);
+
+                Log.Information("Connected to Service");
 
                 return new StreamReader(_pipeClient);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Connection error: {ex.Message}");
+                Log.Error(ex, "Connection failed");
                 _pipeClient?.Dispose();
                 return null;
             }
@@ -114,20 +141,19 @@ namespace AutoKeySwitch.App
                         var switchMsg = JsonSerializer.Deserialize<SwitchLayoutMessage>(message);
                         if (!string.IsNullOrEmpty(switchMsg?.Layout))
                         {
-                            Debug.WriteLine($"Received layout: {switchMsg.Layout}");
-
+                            Log.Information("Received: {Layout}", switchMsg.Layout);
                             LayoutSwitcher.ChangeLayout(switchMsg.Layout);
                         }
                         break;
 
                     default:
-                        Debug.WriteLine($"Unknown message type: {msgType}");
+                        Log.Warning("Unknown message type: {MessageType}", msgType);
                         break;
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Process error: {ex.Message}");
+                Log.Error(ex, "Message processing error");
             }
         }
     }
