@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-AutoKeySwitch.Service-7f7dfca1-449f-4680-a56c-beff8c5ea35f</UserSecretsId>
+	<OutputType>WinExe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
