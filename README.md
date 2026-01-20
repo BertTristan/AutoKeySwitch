@@ -1,4 +1,4 @@
-# AutoKeySwitch
+﻿# AutoKeySwitch
 
 **Windows-only** - Automatically switches keyboard layouts based on the active application.
 
@@ -6,7 +6,7 @@
 
 - Automatic layout switching when you change apps
 - Rule-based configuration via JSON
-- Background service
+- Background monitoring
 - Full activity logging
 
 ## Requirements
@@ -23,16 +23,10 @@ cd AutoKeySwitch
 # Build
 dotnet build
 
-# Run Service (first)
-cd AutoKeySwitch.Service
-dotnet run
-
-# Run App (second, in another terminal)
+# Run App
 cd AutoKeySwitch.App
 dotnet run
 ```
-
-> **Note:** Both must be running. Service detects apps, App switches layouts.
 
 ## Configuration
 
@@ -64,26 +58,23 @@ Edit `%AppData%\Roaming\AutoKeySwitch\rules.json`:
 ## Logs
 
 Logs are stored in `%AppData%\Roaming\AutoKeySwitch\Logs\`:
-- `service-YYYYMMDD.log` - Service activity
-- `app-YYYYMMDD.log` - App activity
+- `aks-YYYYMMDD.log` - App activity
 
 Logs rotate daily (7 days retention).
 
 ## Troubleshooting
 
 **Layout doesn't change:**
-- Check that both Service and App are running
+- Ensure the App is running
 - Check logs in `%AppData%\Roaming\AutoKeySwitch\Logs\`
-
-**Service won't start:**
-- Ensure .NET 10 SDK is installed
-- Check `service-*.log` for errors
 
 ## Project Structure
 ```
-AutoKeySwitch.Service/  # Detects active app
-AutoKeySwitch.App/      # Switches keyboard layout
-AutoKeySwitch.Core/     # Shared logic
+AutoKeySwitch/
+└── AutoKeySwitch.App/
+    ├── Models/             # GameRule, RulesConfig
+    ├── Services/           # AppMonitor, RulesManager, LayoutSwitcher
+    └── App.xaml.cs         # Main logic
 ```
 
 ## License
