@@ -10,6 +10,7 @@ namespace AutoKeySwitch.App
         private CancellationTokenSource? _cancellationTokenSource;
         private string _lastAppName = "";
         private string _lastAppPath = "";
+        private string _lastLayout = "";
 
         public App()
         {
@@ -65,10 +66,15 @@ namespace AutoKeySwitch.App
                         // Retrieve layout to apply
                         string layout = RulesManager.GetLayoutForApp(appName, appPath);
 
-                        Log.Information("App: {AppName} → Layout: {Layout}", appName, layout);
+                        if (layout != _lastLayout)
+                        {
+                            Log.Information("App: {AppName} → Layout: {Layout}", appName, layout);
 
-                        LayoutSwitcher.ChangeLayout(layout);
+                            LayoutSwitcher.ChangeLayout(layout);
 
+                            _lastLayout = layout;
+                        }
+                       
                         // Update last app
                         _lastAppName = appName;
                         _lastAppPath = appPath;
