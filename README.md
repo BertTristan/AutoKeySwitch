@@ -36,7 +36,7 @@ Edit `%AppData%\Roaming\AutoKeySwitch\rules.json`:
   "DefaultLayout": "fr-FR",
   "Rules": [
     {
-      "AppName": "Discord.exe",
+      "AppName": "Discord",
       "AppPath": "C:\\Path\\To\\Discord.exe",
       "Layout": "en-US",
       "Enabled": true
@@ -46,7 +46,7 @@ Edit `%AppData%\Roaming\AutoKeySwitch\rules.json`:
 ```
 
 **Fields:**
-- `AppName` - Executable name (e.g., `Discord.exe`)
+- `AppName` - Process name without .exe (e.g., `Discord`)
 - `AppPath` - Full path (optional but recommended, takes priority over AppName)
 - `Layout` - Target layout (`fr-FR`, `en-US`, `en-GB`)
 - `Enabled` - Toggle rule on/off

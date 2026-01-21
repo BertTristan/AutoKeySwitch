@@ -44,7 +44,7 @@ namespace AutoKeySwitch.App.Services
 
                 // Get process information
                 using Process process = Process.GetProcessById((int)processId);
-                string appName = process.ProcessName + ".exe";
+                string appName = process.ProcessName;
                 string appPath = GetProcessPath(processId);
 
                 return (appName, appPath);
