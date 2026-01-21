@@ -6,13 +6,14 @@
 
 - Automatic layout switching when you change apps
 - Rule-based configuration via JSON
+- Hot-reload: rules.json changes are applied instantly without restarting
 - Background monitoring
 - Full activity logging
 
 ## Requirements
 
 - .NET 10 SDK
-- Windows
+- Windows 11 (maybe Windows 10)
 
 ## Quick Start
 ```bash
@@ -36,7 +37,7 @@ Edit `%AppData%\Roaming\AutoKeySwitch\rules.json`:
   "DefaultLayout": "fr-FR",
   "Rules": [
     {
-      "AppName": "Discord.exe",
+      "AppName": "Discord",
       "AppPath": "C:\\Path\\To\\Discord.exe",
       "Layout": "en-US",
       "Enabled": true
@@ -46,7 +47,7 @@ Edit `%AppData%\Roaming\AutoKeySwitch\rules.json`:
 ```
 
 **Fields:**
-- `AppName` - Executable name (e.g., `Discord.exe`)
+- `AppName` - Process name without .exe (e.g., `Discord`)
 - `AppPath` - Full path (optional but recommended, takes priority over AppName)
 - `Layout` - Target layout (`fr-FR`, `en-US`, `en-GB`)
 - `Enabled` - Toggle rule on/off
@@ -67,6 +68,10 @@ Logs rotate daily (7 days retention).
 **Layout doesn't change:**
 - Ensure the App is running
 - Check logs in `%AppData%\Roaming\AutoKeySwitch\Logs\`
+- Verify AppName and AppPath match process name (Task Manager > Details)
+
+**Known limitations:**
+- Elevated applications (e.g., Task Manager) cannot be switched due to Windows security restrictions (UIPI). This affects all similar tools.
 
 ## Project Structure
 ```

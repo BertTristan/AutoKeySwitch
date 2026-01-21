@@ -9,7 +9,7 @@ namespace AutoKeySwitch.App.Services
         private static extern IntPtr LoadKeyboardLayout(string pwszKLID, uint Flags);
 
         [DllImport("user32.dll")]
-        private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        private static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
         private const uint WM_INPUTLANGCHANGEREQUEST = 0x0050;
         private const uint KLF_ACTIVATE = 0x00000001;
@@ -34,8 +34,8 @@ namespace AutoKeySwitch.App.Services
                     return;
                 }
 
-                // Broadcast layout change to all windows
-                SendMessage((IntPtr)HWND_BROADCAST, WM_INPUTLANGCHANGEREQUEST, IntPtr.Zero, hkl);
+                // Broadcast to all windows
+                PostMessage((IntPtr)HWND_BROADCAST, WM_INPUTLANGCHANGEREQUEST, IntPtr.Zero, hkl);
 
                 Log.Information("Layout changed: {LayoutId}", layoutId);
             }
