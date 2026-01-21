@@ -14,12 +14,10 @@ namespace AutoKeySwitch.App.Services
         /// <param name="appName">App name</param>
         /// <param name="appPath">Full path to app executable</param>
         /// <returns>Keyboard layout identifier</returns>
-        public static string GetLayoutForApp(string appName, string appPath)
+        public static string GetLayoutForApp(string appName, string appPath, RulesConfig config)
         {
             try
             {
-                RulesConfig config = LoadRules();
-
                 // First pass: Match on full path
                 foreach (GameRule rule in config.Rules)
                 {
@@ -57,7 +55,7 @@ namespace AutoKeySwitch.App.Services
         /// Loads rules from the configuration file
         /// </summary>
         /// <returns>Rules configuration object</returns>
-        private static RulesConfig LoadRules()
+        public static RulesConfig LoadRules()
         {
             try
             {
@@ -107,6 +105,18 @@ namespace AutoKeySwitch.App.Services
                     "AutoKeySwitch",
                     "rules.json"
                 );
+        }
+
+        /// <summary>
+        /// Gets the configuration file folder
+        /// </summary>
+        /// <returns>Folder to rules.json in AppData</returns>
+        public static string GetConfigFolder()
+        {
+            return Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "AutoKeySwitch"
+            );
         }
     }
 }
