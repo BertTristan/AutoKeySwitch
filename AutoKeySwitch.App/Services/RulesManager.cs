@@ -61,9 +61,14 @@ namespace AutoKeySwitch.App.Services
             {
                 EnsureConfigExists();
                 string configPath = GetConfigPath();
-                string json = File.ReadAllText(configPath);
-                RulesConfig? rulesConfig = JsonSerializer.Deserialize<RulesConfig>(json, _readOptions);
-                return rulesConfig ?? new RulesConfig();
+
+                using (FileStream fs = new FileStream(configPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (StreamReader reader = new StreamReader(fs))
+                {
+                    string json = reader.ReadToEnd();
+                    RulesConfig? rulesConfig = JsonSerializer.Deserialize<RulesConfig>(json, _readOptions);
+                    return rulesConfig ?? new RulesConfig();
+                }
             }
             catch
             {
