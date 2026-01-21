@@ -15,6 +15,7 @@ namespace AutoKeySwitch.App
 
         private RulesConfig _rulesCache;
         private FileSystemWatcher? _rulesWatcher;
+        private DateTime _lastReloadTime = DateTime.MinValue;
 
         public App()
         {
@@ -75,9 +76,13 @@ namespace AutoKeySwitch.App
         {
             try
             {
-                Thread.Sleep(100);
+                if ((DateTime.Now - _lastReloadTime).TotalMilliseconds < 500)
+                {
+                    return;
+                }
 
                 _rulesCache = RulesManager.LoadRules();
+                _lastReloadTime = DateTime.Now;
                 Log.Information("Rules reloaded from file");
             }
             catch (Exception ex)
