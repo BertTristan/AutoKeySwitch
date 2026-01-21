@@ -6,13 +6,14 @@
 
 - Automatic layout switching when you change apps
 - Rule-based configuration via JSON
+- Hot-reload: rules.json changes are applied instantly without restarting
 - Background monitoring
 - Full activity logging
 
 ## Requirements
 
 - .NET 10 SDK
-- Windows
+- Windows 11 (maybe Windows 10)
 
 ## Quick Start
 ```bash
@@ -67,6 +68,10 @@ Logs rotate daily (7 days retention).
 **Layout doesn't change:**
 - Ensure the App is running
 - Check logs in `%AppData%\Roaming\AutoKeySwitch\Logs\`
+- Verify AppName and AppPath match process name (Task Manager > Details)
+
+**Known limitations:**
+- Elevated applications (e.g., Task Manager) cannot be switched due to Windows security restrictions (UIPI). This affects all similar tools.
 
 ## Project Structure
 ```
