@@ -70,6 +70,11 @@ Logs rotate daily (7 days retention).
 - Check logs in `%AppData%\Roaming\AutoKeySwitch\Logs\`
 - Verify AppName and AppPath match process name (Task Manager > Details)
 
+**Layout stops switching:**
+- Try manually switching your keyboard layout
+- Check logs for errors
+- Restart the app
+
 **Known limitations:**
 - Elevated applications (e.g., Task Manager) cannot be switched due to Windows security restrictions (UIPI). This affects all similar tools.
 
